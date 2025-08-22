@@ -26,9 +26,8 @@
         linear-gradient(180deg, #0a0d22, var(--bg));
       color: var(--text);
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      display: grid;
-      place-items: center;
-      padding: 24px;
+      display: block;
+      padding: 0;
       box-sizing: border-box;
       background-size: 120% 120%, 120% 120%, 100% 100%;
       animation: floatBg 16s ease-in-out infinite;
@@ -41,6 +40,7 @@
     .card {
       width: 100%;
       max-width: 680px;
+      margin: 24px auto;
       background: radial-gradient(1000px 260px at 0% 0%, rgba(56,189,248,0.10), transparent 60%),
                   radial-gradient(700px 260px at 100% 0%, rgba(96,165,250,0.12), transparent 60%),
                   linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00) 20%),
@@ -74,6 +74,13 @@
     .header .subtitle { font-size: 12px; color: #c8d3ff; margin-top: 2px; }
     .byline { color: #c8d3ff; font-size: 12px; text-decoration: none; opacity: 0.9; }
     .byline:hover { text-decoration: underline; }
+    .main {
+      min-height: calc(100vh - 60px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
     h1 {
       margin: 0 0 8px 0;
       font-size: 22px;
@@ -194,6 +201,7 @@
       <a class="byline" href="#" aria-label="Page by Amin">Page by Amin</a>
     </div>
   </header>
+  <main class="main">
   <div class="card">
     
 
@@ -250,6 +258,7 @@
       <span id="status"></span>
     </div>
   </div>
+  </main>
 
   <script>
     (function () {
