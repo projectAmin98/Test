@@ -6,38 +6,74 @@
   <title>Rotational Speed Converter</title>
   <style>
     :root {
-      --bg: #0f172a;
-      --panel: #111827;
-      --text: #e5e7eb;
-      --muted: #94a3b8;
-      --accent: #22d3ee;
-      --accent-weak: #06738a;
-      --border: #1f2937;
+      --bg: #070816;
+      --panel: #0b0f29;
+      --text: #f4f6fb;
+      --muted: #9aa4bf;
+      --accent: #60a5fa; /* blue */
+      --accent-2: #38bdf8; /* sky */
+      --accent-weak: #1e3a8a; /* dark blue */
+      --border: #151a38;
     }
     html, body {
       height: 100%;
     }
     body {
       margin: 0;
-      background: linear-gradient(180deg, #0b1220, var(--bg));
+      background:
+        radial-gradient(60vw 60vh at 15% 10%, rgba(56,189,248,0.10), transparent 60%),
+        radial-gradient(50vw 50vh at 85% 0%, rgba(96,165,250,0.12), transparent 60%),
+        linear-gradient(180deg, #0a0d22, var(--bg));
       color: var(--text);
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
       display: grid;
       place-items: center;
       padding: 24px;
       box-sizing: border-box;
+      background-size: 120% 120%, 120% 120%, 100% 100%;
+      animation: floatBg 16s ease-in-out infinite;
+    }
+    @keyframes floatBg {
+      0% { background-position: 0% 0%, 100% 0%, 0% 0%; }
+      50% { background-position: 20% 10%, 80% 5%, 0% 0%; }
+      100% { background-position: 0% 0%, 100% 0%, 0% 0%; }
     }
     .card {
       width: 100%;
       max-width: 680px;
-      background: radial-gradient(1200px 300px at 0% 0%, rgba(34,211,238,0.08), transparent 60%),
-                  radial-gradient(800px 300px at 100% 0%, rgba(99,102,241,0.08), transparent 60%),
+      background: radial-gradient(1000px 260px at 0% 0%, rgba(56,189,248,0.10), transparent 60%),
+                  radial-gradient(700px 260px at 100% 0%, rgba(96,165,250,0.12), transparent 60%),
+                  linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00) 20%),
                   var(--panel);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35), 0 0 0 1px rgba(56,189,248,0.04) inset, inset 0 1px 0 rgba(255,255,255,0.04);
     }
+    .header {
+      width: 100%;
+      background: #141f66;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .header .inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .header .logo { height: 34px; width: 34px; border-radius: 8px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); padding: 3px; }
+    .header .title { font-weight: 800; letter-spacing: 0.3px; font-size: 18px; }
+    .header .subtitle { font-size: 12px; color: #c8d3ff; margin-top: 2px; }
+    .byline { color: #c8d3ff; font-size: 12px; text-decoration: none; opacity: 0.9; }
+    .byline:hover { text-decoration: underline; }
     h1 {
       margin: 0 0 8px 0;
       font-size: 22px;
@@ -63,7 +99,7 @@
       color: var(--muted);
     }
     input[type="number"], select, input[readonly] {
-      background: #0b1322;
+      background: #0b1029;
       color: var(--text);
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -74,7 +110,7 @@
     }
     input[type="number"]:focus, select:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(34,211,238,0.15);
+      box-shadow: 0 0 0 3px rgba(96,165,250,0.25), 0 0 0 1px rgba(56,189,248,0.28) inset;
     }
     .row {
       display: contents;
@@ -94,8 +130,8 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: #0b1322;
-      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(56,189,248,0.08), rgba(96,165,250,0.08));
+      border: 1px solid rgba(96,165,250,0.28);
       border-radius: 999px;
       padding: 8px 10px;
       user-select: none;
@@ -112,9 +148,9 @@
     }
     .pill.active {
       color: var(--text);
-      background: linear-gradient(180deg, rgba(34,211,238,0.18), rgba(34,211,238,0.08));
-      border-color: var(--accent-weak);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+      background: linear-gradient(135deg, rgba(96,165,250,0.32), rgba(56,189,248,0.28));
+      border-color: rgba(96,165,250,0.45);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
     }
     .outputs {
       margin-top: 8px;
@@ -136,7 +172,7 @@
       align-items: center;
     }
     .kbd {
-      background: #0b1322;
+      background: #0b1029;
       border: 1px solid var(--border);
       padding: 2px 6px;
       border-radius: 6px;
@@ -146,9 +182,20 @@
   </style>
 </head>
 <body>
+  <header class="header">
+    <div class="inner">
+      <div class="brand">
+        <img class="logo" src="https://stratusauto.com/wp-content/uploads/2022/11/milestone-1.jpg" alt="Stratus Automation logo" />
+        <div>
+          <div class="title">Stratus Automation</div>
+          <div class="subtitle">Rotational Speed Converter</div>
+        </div>
+      </div>
+      <a class="byline" href="#" aria-label="Page by Amin">Page by Amin</a>
+    </div>
+  </header>
   <div class="card">
-    <h1>Rotational Speed Converter</h1>
-    <p class="sub">Convert between deg/s, rev/s, rpm with optional gear ratio.</p>
+    
 
     <div class="grid">
       <div class="row">
@@ -262,7 +309,7 @@
         modeInOut.classList.toggle('active', !outInActive);
         modeOutIn.setAttribute('aria-pressed', String(outInActive));
         modeInOut.setAttribute('aria-pressed', String(!outInActive));
-        modeHelp.textContent = outInActive ? 'Output speed = Motor speed / Ratio' : 'Output speed = Motor speed × Ratio';
+        modeHelp.textContent = outInActive ? 'Output speed = Motor speed / Ratio' : 'Motor speed (gear ratio ignored)';
         update();
       }
 
@@ -288,12 +335,18 @@
         const inRevS = toRevPerSec(value, unit);
         let outRevSVal = inRevS;
 
-        if (ratioOk) {
-          outRevSVal = (mode === 'out_in') ? (inRevS / ratio) : (inRevS * ratio);
-          status.textContent = '';
-        } else if (inputGear.value.trim() !== '') {
-          status.textContent = 'Enter a positive gear ratio';
+        if (mode === 'out_in') {
+          if (ratioOk) {
+            outRevSVal = inRevS / ratio;
+            status.textContent = '';
+          } else if (inputGear.value.trim() !== '') {
+            status.textContent = 'Enter a positive gear ratio';
+          } else {
+            status.textContent = '';
+          }
         } else {
+          // Motor speed mode: ignore ratio entirely
+          outRevSVal = inRevS;
           status.textContent = '';
         }
 
