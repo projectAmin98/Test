@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Max Velocity Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .calc-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #e1e5e9;
+        }
+
+        .calc-card h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            font-weight: 500;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e1e5e9;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+
+        .formula {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #2c3e50;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Motion Calculator</h1>
+        
+        <!-- Forward Calculation Card -->
+        <div class="calc-card">
+            <h2>Calculate Max Velocity</h2>
+            <form id="velocityForm">
+                <div class="form-group">
+                    <label for="rpm">1. RPM (Revolutions Per Minute)</label>
+                    <input type="number" id="rpm" name="rpm" step="0.01" min="0" required placeholder="Enter RPM value">
+                </div>
+
+                <div class="form-group">
+                    <label for="unitPerRev">1.5. Unit per Revolution</label>
+                    <input type="number" id="unitPerRev" name="unitPerRev" step="0.01" min="0" required placeholder="Enter units per revolution">
+                </div>
+
+                <div class="form-group">
+                    <label for="unitType">Unit Type</label>
+                    <select id="unitType" name="unitType" required>
+                        <option value="">Select unit type</option>
+                        <option value="pulse">Pulse</option>
+                        <option value="mm">Millimeter (mm)</option>
+                        <option value="um">Micrometer (μm)</option>
+                        <option value="nm">Nanometer (nm)</option>
+                        <option value="degree">Degree (°)</option>
+                        <option value="inch">Inch</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="gearRatio">2. Gear Ratio</label>
+                    <input type="number" id="gearRatio" name="gearRatio" step="0.01" min="0.01" required placeholder="Enter gear ratio">
+                </div>
+
+                <button type="submit" class="calculate-btn">Calculate Max Velocity</button>
+            </form>
+
+            <div id="results" class="results" style="display: none;">
+                <h3 style="margin-bottom: 20px; color: #333;">Results</h3>
+                <div class="result-item">
+                    <span class="result-label">RPS (Revolutions Per Second):</span>
+                    <span class="result-value" id="rpsResult">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Max Velocity:</span>
+                    <span class="result-value" id="maxVelocityResult">-</span>
+                </div>
+                
+                <div class="formula">
+                    <strong>Formula:</strong><br>
+                    RPS = RPM ÷ 60<br>
+                    Max Velocity = (RPS × Unit per Revolution) ÷ Gear Ratio
+                </div>
+            </div>
+        </div>
+
+        <!-- Reverse Calculation Card -->
+        <div class="calc-card">
+            <h2>Calculate Required RPM</h2>
+            <form id="rpmForm">
+                <div class="form-group">
+                    <label for="targetVelocity">1. Target Max Velocity</label>
+                    <input type="number" id="targetVelocity" name="targetVelocity" step="0.01" min="0" required placeholder="Enter target velocity">
+                </div>
+
+                <div class="form-group">
+                    <label for="unitPerRev2">1.5. Unit per Revolution</label>
+                    <input type="number" id="unitPerRev2" name="unitPerRev2" step="0.01" min="0" required placeholder="Enter units per revolution">
+                </div>
+
+                <div class="form-group">
+                    <label for="unitType2">Unit Type</label>
+                    <select id="unitType2" name="unitType2" required>
+                        <option value="">Select unit type</option>
+                        <option value="pulse">Pulse</option>
+                        <option value="mm">Millimeter (mm)</option>
+                        <option value="um">Micrometer (μm)</option>
+                        <option value="nm">Nanometer (nm)</option>
+                        <option value="degree">Degree (°)</option>
+                        <option value="inch">Inch</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="gearRatio2">2. Gear Ratio</label>
+                    <input type="number" id="gearRatio2" name="gearRatio2" step="0.01" min="0.01" required placeholder="Enter gear ratio">
+                </div>
+
+                <button type="submit" class="calculate-btn">Calculate Required RPM</button>
+            </form>
+
+            <div id="results2" class="results" style="display: none;">
+                <h3 style="margin-bottom: 20px; color: #333;">Results</h3>
+                <div class="result-item">
+                    <span class="result-label">Required RPS:</span>
+                    <span class="result-value" id="requiredRpsResult">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Required RPM:</span>
+                    <span class="result-value" id="requiredRpmResult">-</span>
+                </div>
+                
+                <div class="formula">
+                    <strong>Formula:</strong><br>
+                    Required RPS = (Target Velocity × Gear Ratio) ÷ Unit per Revolution<br>
+                    Required RPM = Required RPS × 60
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('velocityForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get input values
+            const rpm = parseFloat(document.getElementById('rpm').value);
+            const unitPerRev = parseFloat(document.getElementById('unitPerRev').value);
+            const unitType = document.getElementById('unitType').value;
+            const gearRatio = parseFloat(document.getElementById('gearRatio').value);
+            
+            // Validate inputs
+            if (isNaN(rpm) || isNaN(unitPerRev) || isNaN(gearRatio) || !unitType) {
+                alert('Please fill in all fields with valid numbers');
+                return;
+            }
+            
+            if (rpm < 0 || unitPerRev < 0 || gearRatio <= 0) {
+                alert('Please enter positive values for RPM and units per revolution, and a positive non-zero value for gear ratio');
+                return;
+            }
+            
+            // Calculate RPS
+            const rps = rpm / 60;
+            
+            // Calculate Max Velocity
+            const maxVelocity = (rps * unitPerRev) / gearRatio;
+            
+            // Display results
+            document.getElementById('rpsResult').textContent = rps.toFixed(2) + ' RPS';
+            document.getElementById('maxVelocityResult').textContent = maxVelocity.toFixed(2) + ' ' + getUnitDisplay(unitType) + '/s';
+            
+            // Show results section
+            document.getElementById('results').style.display = 'block';
+        });
+        
+        // Reverse calculation form
+        document.getElementById('rpmForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get input values
+            const targetVelocity = parseFloat(document.getElementById('targetVelocity').value);
+            const unitPerRev2 = parseFloat(document.getElementById('unitPerRev2').value);
+            const unitType2 = document.getElementById('unitType2').value;
+            const gearRatio2 = parseFloat(document.getElementById('gearRatio2').value);
+            
+            // Validate inputs
+            if (isNaN(targetVelocity) || isNaN(unitPerRev2) || isNaN(gearRatio2) || !unitType2) {
+                alert('Please fill in all fields with valid numbers');
+                return;
+            }
+            
+            if (targetVelocity < 0 || unitPerRev2 < 0 || gearRatio2 <= 0) {
+                alert('Please enter positive values for target velocity and units per revolution, and a positive non-zero value for gear ratio');
+                return;
+            }
+            
+            // Calculate Required RPS
+            const requiredRps = (targetVelocity * gearRatio2) / unitPerRev2;
+            
+            // Calculate Required RPM
+            const requiredRpm = requiredRps * 60;
+            
+            // Display results
+            document.getElementById('requiredRpsResult').textContent = requiredRps.toFixed(2) + ' RPS';
+            document.getElementById('requiredRpmResult').textContent = requiredRpm.toFixed(2) + ' RPM';
+            
+            // Show results section
+            document.getElementById('results2').style.display = 'block';
+        });
+        
+        function getUnitDisplay(unitType) {
+            const unitMap = {
+                'pulse': 'pulse',
+                'mm': 'mm',
+                'um': 'μm',
+                'nm': 'nm',
+                'degree': '°',
+                'inch': 'inch'
+            };
+            return unitMap[unitType] || unitType;
+        }
+        
+        // Add real-time validation for first form
+        document.getElementById('rpm').addEventListener('input', function() {
+            const value = parseFloat(this.value);
+            if (value < 0) {
+                this.style.borderColor = '#e74c3c';
+            } else {
+                this.style.borderColor = '#e1e5e9';
+            }
+        });
+        
+        document.getElementById('unitPerRev').addEventListener('input', function() {
+            const value = parseFloat(this.value);
+            if (value < 0) {
+                this.style.borderColor = '#e74c3c';
+            } else {
+                this.style.borderColor = '#e1e5e9';
+            }
+        });
+        
+        document.getElementById('gearRatio').addEventListener('input', function() {
+            const value = parseFloat(this.value);
+            if (value <= 0) {
+                this.style.borderColor = '#e74c3c';
+            } else {
+                this.style.borderColor = '#e1e5e9';
+            }
+        });
+        
+        // Add real-time validation for second form
+        document.getElementById('targetVelocity').addEventListener('input', function() {
+            const value = parseFloat(this.value);
+            if (value < 0) {
+                this.style.borderColor = '#e74c3c';
+            } else {
+                this.style.borderColor = '#e1e5e9';
+            }
+        });
+        
+        document.getElementById('unitPerRev2').addEventListener('input', function() {
+            const value = parseFloat(this.value);
+            if (value < 0) {
+                this.style.borderColor = '#e74c3c';
+            } else {
+                this.style.borderColor = '#e1e5e9';
+            }
+        });
+        
+        document.getElementById('gearRatio2').addEventListener('input', function() {
+            const value = parseFloat(this.value);
+            if (value <= 0) {
+                this.style.borderColor = '#e74c3c';
+            } else {
+                this.style.borderColor = '#e1e5e9';
+            }
+        });
+    </script>
+</body>
+</html>
