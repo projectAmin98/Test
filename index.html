@@ -1,483 +1,382 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perpendicular Distance Calculator | Trigonometric Tool</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: rgba(30, 30, 40, 0.95);
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-            border: 1px solid rgba(100, 200, 255, 0.1);
-            padding: 40px;
-            max-width: 900px;
-            width: 100%;
-            backdrop-filter: blur(10px);
-        }
-
-        h1 {
-            text-align: center;
-            background: linear-gradient(135deg, #64d8ff 0%, #a98aff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-            font-size: 2em;
-            font-weight: 700;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #b0c4de;
-            margin-bottom: 30px;
-            font-size: 0.9em;
-        }
-
-        .calculator-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #b0c4de;
-            font-weight: 600;
-            font-size: 0.95em;
-            letter-spacing: 0.3px;
-        }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid rgba(100, 200, 255, 0.2);
-            border-radius: 8px;
-            font-size: 1em;
-            background-color: rgba(40, 45, 60, 0.7);
-            color: #ffffff;
-            transition: all 0.3s ease;
-        }
-
-        input[type="number"]:focus {
-            outline: none;
-            border-color: #64d8ff;
-            box-shadow: 0 0 0 3px rgba(100, 216, 255, 0.15);
-            background-color: rgba(40, 45, 60, 0.9);
-        }
-
-        select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid rgba(100, 200, 255, 0.2);
-            border-radius: 8px;
-            font-size: 1em;
-            background-color: rgba(40, 45, 60, 0.7);
-            color: #ffffff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        select:focus {
-            outline: none;
-            border-color: #64d8ff;
-            box-shadow: 0 0 0 3px rgba(100, 216, 255, 0.15);
-            background-color: rgba(40, 45, 60, 0.9);
-        }
-
-        option {
-            background-color: #1e2838;
-            color: #ffffff;
-        }
-
-        .result-box {
-            background: linear-gradient(135deg, rgba(100, 216, 255, 0.1) 0%, rgba(169, 138, 255, 0.1) 100%);
-            border: 1px solid rgba(100, 200, 255, 0.3);
-            padding: 25px;
-            border-radius: 12px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 4px 20px rgba(100, 216, 255, 0.1);
-        }
-
-        .result-label {
-            font-size: 0.9em;
-            color: #b0c4de;
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .result-value {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin-bottom: 5px;
-            background: linear-gradient(135deg, #64d8ff 0%, #a98aff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .result-unit {
-            font-size: 0.9em;
-            color: #9eb3d4;
-            font-weight: 500;
-        }
-
-        canvas {
-            border: 1px solid rgba(100, 200, 255, 0.2);
-            border-radius: 12px;
-            display: block;
-            width: 100%;
-            height: auto;
-            background: rgba(20, 25, 35, 0.8);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .visualization-section {
-            margin-top: 30px;
-        }
-
-        .section-title {
-            color: #e6f2ff;
-            margin-bottom: 15px;
-            font-size: 1.2em;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .formula-box {
-            background: rgba(40, 45, 60, 0.6);
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            border-left: 3px solid #64d8ff;
-            border: 1px solid rgba(100, 200, 255, 0.2);
-        }
-
-        .formula-title {
-            font-weight: 600;
-            color: #64d8ff;
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
-        }
-
-        .formula {
-            font-family: 'Courier New', monospace;
-            color: #b0c4de;
-            font-size: 0.95em;
-            line-height: 1.6;
-        }
-
-        .info-box {
-            background: rgba(40, 45, 60, 0.6);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            border-left: 3px solid #a98aff;
-            border: 1px solid rgba(169, 138, 255, 0.2);
-            font-size: 0.9em;
-            color: #b0c4de;
-        }
-
-        @media (max-width: 768px) {
-            .calculator-section {
-                grid-template-columns: 1fr;
-            }
-            
-            .container {
-                padding: 25px;
-            }
-
-            h1 {
-                font-size: 1.5em;
-            }
-
-            .result-value {
-                font-size: 2em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rotational Speed Converter</title>
+  <style>
+    :root {
+      --bg: #070816;
+      --panel: #0b0f29;
+      --text: #f4f6fb;
+      --muted: #9aa4bf;
+      --accent: #60a5fa; /* blue */
+      --accent-2: #38bdf8; /* sky */
+      --accent-weak: #1e3a8a; /* dark blue */
+      --border: #151a38;
+    }
+    html, body {
+      height: 100%;
+    }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(60vw 60vh at 15% 10%, rgba(56,189,248,0.10), transparent 60%),
+        radial-gradient(50vw 50vh at 85% 0%, rgba(96,165,250,0.12), transparent 60%),
+        linear-gradient(180deg, #0a0d22, var(--bg));
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      display: block;
+      padding: 0;
+      box-sizing: border-box;
+      background-size: 120% 120%, 120% 120%, 100% 100%;
+      animation: floatBg 16s ease-in-out infinite;
+    }
+    @keyframes floatBg {
+      0% { background-position: 0% 0%, 100% 0%, 0% 0%; }
+      50% { background-position: 20% 10%, 80% 5%, 0% 0%; }
+      100% { background-position: 0% 0%, 100% 0%, 0% 0%; }
+    }
+    .card {
+      width: 100%;
+      max-width: 680px;
+      margin: 24px auto;
+      background: radial-gradient(1000px 260px at 0% 0%, rgba(56,189,248,0.10), transparent 60%),
+                  radial-gradient(700px 260px at 100% 0%, rgba(96,165,250,0.12), transparent 60%),
+                  linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00) 20%),
+                  var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35), 0 0 0 1px rgba(56,189,248,0.04) inset, inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .header {
+      width: 100%;
+      background: #141f66;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .header .inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .header .logo { height: 34px; width: 34px; border-radius: 8px; background: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.08); padding: 3px; object-fit: contain; }
+    .header .title { font-weight: 800; letter-spacing: 0.3px; font-size: 18px; }
+    .header .subtitle { font-size: 12px; color: #c8d3ff; margin-top: 2px; }
+    .byline { color: #c8d3ff; font-size: 12px; text-decoration: none; opacity: 0.9; }
+    .byline:hover { text-decoration: underline; }
+    .main {
+      min-height: calc(100vh - 60px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 22px;
+      letter-spacing: 0.2px;
+    }
+    .sub {
+      margin: 0 0 20px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    input[type="number"], select, input[readonly] {
+      background: #0b1029;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      outline: none;
+      font-size: 14px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    input[type="number"]:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(96,165,250,0.25), 0 0 0 1px rgba(56,189,248,0.28) inset;
+    }
+    .row {
+      display: contents;
+    }
+    .col-span-8 { grid-column: span 8 / span 8; }
+    .col-span-4 { grid-column: span 4 / span 4; }
+    .col-span-6 { grid-column: span 6 / span 6; }
+    .col-span-12 { grid-column: span 12 / span 12; }
+    @media (max-width: 640px) {
+      .col-span-8, .col-span-6, .col-span-4, .col-span-12 { grid-column: 1 / -1; }
+    }
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(180deg, rgba(56,189,248,0.08), rgba(96,165,250,0.08));
+      border: 1px solid rgba(96,165,250,0.28);
+      border-radius: 999px;
+      padding: 8px 10px;
+      user-select: none;
+    }
+    .switch input { display: none; }
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid transparent;
+    }
+    .pill.active {
+      color: var(--text);
+      background: linear-gradient(135deg, rgba(96,165,250,0.32), rgba(56,189,248,0.28));
+      border-color: rgba(96,165,250,0.45);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    }
+    .outputs {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+    }
+    .help {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .footer {
+      margin-top: 18px;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .kbd {
+      background: #0b1029;
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      color: var(--text);
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📐 Perpendicular Distance Calculator</h1>
-        <p class="subtitle">Calculate perpendicular offset distance using trigonometric principles</p>
-
-        <div class="calculator-section">
-            <div>
-                <div class="input-group">
-                    <label for="distance">📏 Base Distance (AB):</label>
-                    <input type="number" id="distance" value="100" min="0" step="0.01">
-                </div>
-
-                <div class="input-group">
-                    <label for="degree">📐 Angle at Point A (θ):</label>
-                    <input type="number" id="degree" value="45" min="0" max="90" step="1">
-                </div>
-
-                <div class="input-group">
-                    <label for="unit">📊 Measurement Unit:</label>
-                    <select id="unit">
-                        <option value="mm">Millimeters (mm)</option>
-                        <option value="cm">Centimeters (cm)</option>
-                        <option value="m" selected>Meters (m)</option>
-                    </select>
-                </div>
-
-                <div class="formula-box">
-                    <div class="formula-title">⚡ Trigonometric Formula</div>
-                    <div class="formula">
-                        BC = AB × tan(θ)
-                        <br><br>
-                        Where:<br>
-                        • AB = base distance between points<br>
-                        • θ = angle at point A (∠BAC)<br>
-                        • ∠ABC = 90° (perpendicular)<br>
-                        • BC = perpendicular offset
-                    </div>
-                </div>
-
-                <div class="info-box">
-                    <strong>📊 Configuration:</strong><br>
-                    • Points A and B define the base line<br>
-                    • Point C forms a 90° angle at B<br>
-                    • Creates a right triangle (ABC)<br>
-                    • Perfect for offset calculations
-                </div>
-            </div>
-
-            <div>
-                <div class="result-box">
-                    <div class="result-label">⟂ Perpendicular Distance (BC)</div>
-                    <div class="result-value" id="result">0</div>
-                    <div class="result-unit" id="resultUnit">m</div>
-                </div>
-            </div>
+  <header class="header">
+    <div class="inner">
+      <div class="brand">
+        <img class="logo" src="https://images.seeklogo.com/logo-png/55/3/stratus-automation-logo-png_seeklogo-559561.png" alt="Stratus Automation logo" />
+        <div>
+          <div class="title">Stratus Automation</div>
+          <div class="subtitle">Rotational Speed Converter</div>
         </div>
+      </div>
+      <a class="byline" href="#" aria-label="Page by Amin">Page by Amin</a>
+    </div>
+  </header>
+  <main class="main">
+  <div class="card">
+    
 
-        <div class="visualization-section">
-            <div class="section-title">📈 Interactive Geometry Visualization</div>
-            <canvas id="canvas" width="800" height="500"></canvas>
+    <div class="grid">
+      <div class="row">
+        <div class="field col-span-8">
+          <label for="value">Input value</label>
+          <input id="value" type="number" step="any" placeholder="e.g., 120" />
         </div>
+        <div class="field col-span-4">
+          <label for="unit">Unit</label>
+          <select id="unit">
+            <option value="deg_s">deg/s</option>
+            <option value="rev_s">rev/s</option>
+            <option value="rpm">rpm</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field col-span-6">
+          <label for="gear">Gear ratio</label>
+          <input id="gear" type="number" step="any" min="0" placeholder="e.g., 2" />
+          <div class="hint">Must be positive. With "Output speed" selected, 2 means output is half motor speed.</div>
+        </div>
+        <div class="field col-span-6">
+          <label>Output speed or motor speed</label>
+          <div class="switch" role="group" aria-label="Gear ratio mode">
+            <button id="modeOutIn" class="pill active" type="button" aria-pressed="true">Output speed</button>
+            <button id="modeInOut" class="pill" type="button" aria-pressed="false">Motor speed</button>
+          </div>
+          <div class="help" id="modeHelp">Output speed = Motor speed / Ratio</div>
+        </div>
+      </div>
     </div>
 
-    <script>
-        const distanceInput = document.getElementById('distance');
-        const degreeInput = document.getElementById('degree');
-        const unitSelect = document.getElementById('unit');
-        const resultElement = document.getElementById('result');
-        const resultUnitElement = document.getElementById('resultUnit');
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
+    <div class="outputs">
+      <div class="field col-span-4">
+        <label for="out_deg_s">deg/s</label>
+        <input id="out_deg_s" type="text" readonly />
+      </div>
+      <div class="field col-span-4">
+        <label for="out_rev_s">rev/s</label>
+        <input id="out_rev_s" type="text" readonly />
+      </div>
+      <div class="field col-span-4">
+        <label for="out_rpm">rpm</label>
+        <input id="out_rpm" type="text" readonly />
+      </div>
+    </div>
 
-        function calculate() {
-            const distanceAB = parseFloat(distanceInput.value) || 0;
-            const angleA = parseFloat(degreeInput.value) || 0;
-            const unit = unitSelect.value;
-            
-            // Limit angle to reasonable range
-            if (angleA > 90) {
-                degreeInput.value = 90;
-                return;
-            }
-            if (angleA < 0) {
-                degreeInput.value = 0;
-                return;
-            }
-            
-            // Convert degree to radians
-            const radians = angleA * Math.PI / 180;
-            
-            // Calculate BC using right triangle trigonometry
-            // In right triangle ABC where angle ABC = 90°:
-            // tan(angle A) = BC / AB
-            // Therefore: BC = AB × tan(angle A)
-            const distanceBC = distanceAB * Math.tan(radians);
-            
-            resultElement.textContent = distanceBC.toFixed(2);
-            resultUnitElement.textContent = unit;
-            
-            drawVisualization(distanceAB, angleA, distanceBC, unit);
+    <div class="footer">
+      <span>Tip: Use <span class="kbd">Tab</span> to jump between fields.</span>
+      <span id="status"></span>
+    </div>
+  </div>
+  </main>
+
+  <script>
+    (function () {
+      const inputValue = document.getElementById('value');
+      const inputUnit = document.getElementById('unit');
+      const inputGear = document.getElementById('gear');
+      const outDegS = document.getElementById('out_deg_s');
+      const outRevS = document.getElementById('out_rev_s');
+      const outRpm = document.getElementById('out_rpm');
+      const modeOutIn = document.getElementById('modeOutIn');
+      const modeInOut = document.getElementById('modeInOut');
+      const modeHelp = document.getElementById('modeHelp');
+      const status = document.getElementById('status');
+
+      /**
+       * Convert arbitrary unit to rev/s.
+       */
+      function toRevPerSec(value, unit) {
+        if (!isFinite(value)) return NaN;
+        switch (unit) {
+          case 'deg_s':
+            return value / 360;
+          case 'rev_s':
+            return value;
+          case 'rpm':
+            return value / 60;
+          default:
+            return NaN;
+        }
+      }
+
+      /**
+       * From rev/s to all other units.
+       */
+      function fromRevPerSec(revPerSec) {
+        if (!isFinite(revPerSec)) return { deg_s: '', rev_s: '', rpm: '' };
+        return {
+          deg_s: revPerSec * 360,
+          rev_s: revPerSec,
+          rpm: revPerSec * 60
+        };
+      }
+
+      function formatNumber(n) {
+        if (!isFinite(n)) return '';
+        const abs = Math.abs(n);
+        const useSci = (abs !== 0 && (abs < 1e-3 || abs >= 1e6));
+        return useSci ? n.toExponential(6) : n.toLocaleString(undefined, { maximumFractionDigits: 6 });
+      }
+
+      let mode = 'out_in'; // 'out_in' => output = input / ratio, 'in_out' => output = input * ratio
+
+      function setMode(newMode) {
+        mode = newMode;
+        const outInActive = mode === 'out_in';
+        modeOutIn.classList.toggle('active', outInActive);
+        modeInOut.classList.toggle('active', !outInActive);
+        modeOutIn.setAttribute('aria-pressed', String(outInActive));
+        modeInOut.setAttribute('aria-pressed', String(!outInActive));
+        modeHelp.textContent = outInActive ? 'Output speed = Motor speed / Ratio' : 'Motor speed (gear ratio ignored)';
+        update();
+      }
+
+      modeOutIn.addEventListener('click', () => setMode('out_in'));
+      modeInOut.addEventListener('click', () => setMode('in_out'));
+
+      function update() {
+        const value = parseFloat(inputValue.value);
+        const unit = inputUnit.value;
+        const ratio = parseFloat(inputGear.value);
+
+        const valueOk = isFinite(value);
+        const ratioOk = isFinite(ratio) && ratio > 0;
+
+        if (!valueOk) {
+          status.textContent = '';
+          outDegS.value = '';
+          outRevS.value = '';
+          outRpm.value = '';
+          return;
         }
 
-        function drawVisualization(distanceAB, angleA, distanceBC, unit) {
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Set up coordinates
-            const margin = 80;
-            const scale = Math.min((canvas.width - 2 * margin) / distanceAB, 
-                                   (canvas.height - 2 * margin) / Math.max(distanceBC, distanceAB));
-            
-            // Position of object A (left side)
-            const Ax = margin;
-            const Ay = canvas.height - margin;
-            
-            // Position of object B (right side, aligned horizontally with A)
-            const scaledAB = distanceAB * scale;
-            const Bx = Ax + scaledAB;
-            const By = Ay;
-            
-            // Position of object C (perpendicular from B, upward)
-            const scaledBC = distanceBC * scale;
-            const Cx = Bx;
-            const Cy = By - scaledBC;
-            
-            // Draw right angle indicator at B
-            const rightAngleSize = 20;
-            ctx.beginPath();
-            ctx.moveTo(Bx - rightAngleSize, By);
-            ctx.lineTo(Bx - rightAngleSize, By - rightAngleSize);
-            ctx.lineTo(Bx, By - rightAngleSize);
-            ctx.strokeStyle = '#6b7c93';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            
-            // Draw line AB (base)
-            ctx.beginPath();
-            ctx.moveTo(Ax, Ay);
-            ctx.lineTo(Bx, By);
-            ctx.strokeStyle = '#64d8ff';
-            ctx.lineWidth = 4;
-            ctx.stroke();
-            
-            // Draw line BC (perpendicular, the result)
-            ctx.beginPath();
-            ctx.moveTo(Bx, By);
-            ctx.lineTo(Cx, Cy);
-            ctx.strokeStyle = '#ff6bcf';
-            ctx.lineWidth = 4;
-            ctx.stroke();
-            
-            // Draw line AC (hypotenuse)
-            ctx.beginPath();
-            ctx.moveTo(Ax, Ay);
-            ctx.lineTo(Cx, Cy);
-            ctx.strokeStyle = '#7de7a7';
-            ctx.lineWidth = 3;
-            ctx.setLineDash([5, 5]);
-            ctx.stroke();
-            ctx.setLineDash([]);
-            
-            // Draw angle arc at A
-            const arcRadius = 50;
-            const startAngle = 0;
-            const endAngle = -angleA * Math.PI / 180; // Negative for upward
-            ctx.beginPath();
-            ctx.arc(Ax, Ay, arcRadius, startAngle, endAngle, true);
-            ctx.strokeStyle = '#ffc85e';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            
-            // Draw object A
-            ctx.beginPath();
-            ctx.arc(Ax, Ay, 16, 0, 2 * Math.PI);
-            ctx.fillStyle = '#64d8ff';
-            ctx.fill();
-            ctx.strokeStyle = '#4ac4ff';
-            ctx.lineWidth = 3;
-            ctx.stroke();
-            
-            // Draw object B
-            ctx.beginPath();
-            ctx.arc(Bx, By, 16, 0, 2 * Math.PI);
-            ctx.fillStyle = '#ffc85e';
-            ctx.fill();
-            ctx.strokeStyle = '#ffb83e';
-            ctx.lineWidth = 3;
-            ctx.stroke();
-            
-            // Draw object C
-            ctx.beginPath();
-            ctx.arc(Cx, Cy, 16, 0, 2 * Math.PI);
-            ctx.fillStyle = '#7de7a7';
-            ctx.fill();
-            ctx.strokeStyle = '#5dd787';
-            ctx.lineWidth = 3;
-            ctx.stroke();
-            
-            // Labels for objects
-            ctx.font = 'bold 18px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            
-            // Label A
-            ctx.fillStyle = '#0a2540';
-            ctx.fillText('A', Ax, Ay);
-            
-            // Label B
-            ctx.fillStyle = '#0a2540';
-            ctx.fillText('B', Bx, By);
-            
-            // Label C
-            ctx.fillStyle = '#0a2540';
-            ctx.fillText('C', Cx, Cy);
-            
-            // Distance labels
-            ctx.font = 'bold 16px Arial';
-            ctx.textBaseline = 'alphabetic';
-            
-            // Label AB distance
-            ctx.fillStyle = '#64d8ff';
-            ctx.fillText(`AB = ${distanceAB.toFixed(0)} ${unit}`, (Ax + Bx) / 2, Ay + 30);
-            
-            // Label BC distance (result)
-            ctx.fillStyle = '#ff6bcf';
-            ctx.save();
-            ctx.translate(Bx + 30, (By + Cy) / 2);
-            ctx.fillText(`BC = ${distanceBC.toFixed(2)} ${unit}`, 0, 0);
-            ctx.restore();
-            
-            // Label AC distance
-            const distanceAC = Math.sqrt(distanceAB * distanceAB + distanceBC * distanceBC);
-            ctx.fillStyle = '#7de7a7';
-            const midACx = (Ax + Cx) / 2;
-            const midACy = (Ay + Cy) / 2;
-            ctx.fillText(`AC = ${distanceAC.toFixed(2)} ${unit}`, midACx - 40, midACy - 10);
-            
-            // Angle label
-            const angleLabelX = Ax + arcRadius * 1.5 * Math.cos(-angleA * Math.PI / 180 / 2);
-            const angleLabelY = Ay + arcRadius * 1.5 * Math.sin(-angleA * Math.PI / 180 / 2);
-            ctx.fillStyle = '#ffc85e';
-            ctx.fillText(`${angleA}°`, angleLabelX, angleLabelY);
-            
-            // Right angle label
-            ctx.fillStyle = '#9eb3d4';
-            ctx.font = '14px Arial';
-            ctx.fillText('90°', Bx - 35, By - 35);
+        const inRevS = toRevPerSec(value, unit);
+        let outRevSVal = inRevS;
+
+        if (mode === 'out_in') {
+          if (ratioOk) {
+            outRevSVal = inRevS / ratio;
+            status.textContent = '';
+          } else if (inputGear.value.trim() !== '') {
+            status.textContent = 'Enter a positive gear ratio';
+          } else {
+            status.textContent = '';
+          }
+        } else {
+          // Motor speed mode: ignore ratio entirely
+          outRevSVal = inRevS;
+          status.textContent = '';
         }
 
-        // Add event listeners
-        distanceInput.addEventListener('input', calculate);
-        degreeInput.addEventListener('input', calculate);
-        unitSelect.addEventListener('change', calculate);
+        const converted = fromRevPerSec(outRevSVal);
+        outDegS.value = formatNumber(converted.deg_s);
+        outRevS.value = formatNumber(converted.rev_s);
+        outRpm.value = formatNumber(converted.rpm);
+      }
 
-        // Initial calculation
-        calculate();
-    </script>
+      inputValue.addEventListener('input', update);
+      inputUnit.addEventListener('change', update);
+      inputGear.addEventListener('input', update);
+
+      // Defaults for a quick demo
+      inputValue.value = '120';
+      inputUnit.value = 'rpm';
+      inputGear.value = '';
+      update();
+    })();
+  </script>
 </body>
 </html>
+
+
